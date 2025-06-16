@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+    
+<H1>Server Started</H1>
+
+<!-- 
+enctype="multipart/form-data" is required when uploading files.
+It encodes the form data as separate parts so binary file data can be sent.
+Without it, file uploads will fail or req.file will be undefined.
+-->
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+
+    <input type="file" name="profileImage">
+    <button type="submit">Upload</button>
+
+</form>
+
+</body>
+</html>
