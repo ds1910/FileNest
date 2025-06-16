@@ -1,0 +1,21 @@
+/*
+📦 Why we store uploaded files temporarily before uploading to Cloud (e.g., AWS S3 / Cloudinary):
+
+1. ✅ Validation & Security:
+   - Allows checking file type, size, or scanning for viruses before uploading to the cloud.
+
+2. 🔁 Error Handling:
+   - If the cloud upload fails, we still have the local file — enabling retries without bothering the user.
+
+3. 🚀 Decoupling:
+   - Separates user upload from third-party cloud service.
+   - Upload logic stays consistent even if cloud service has issues.
+
+4. ⏳ Background Processing:
+   - Enables async uploads via queues (e.g., Bull), improving response time and scalability.
+
+5. 📂 Audit & Logging:
+   - Keeps a temporary record of uploads for tracking, debugging, or versioning.
+
+⚠️ Direct upload to cloud without local storage = No control, harder error recovery, and potential data loss.
+*/
