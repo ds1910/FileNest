@@ -10,8 +10,7 @@ const {
   generateRefreshToken,
   verifyAccessToken,
   verifyRefreshToken,
-} = require("../../service/auth");
-
+} = require("../service/auth");
 
 
 const sendmailForSignup = async({to,name,loginURL}) =>{

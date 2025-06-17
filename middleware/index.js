@@ -4,7 +4,7 @@ const {
   generateRefreshToken,
   verifyAccessToken,
   verifyRefreshToken,
-} = require("../../service/auth");
+} = require("../service/auth");
 
 // Middleware to log request and response info
 const logReqRes = (fileName) => {
