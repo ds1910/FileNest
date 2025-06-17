@@ -16,7 +16,6 @@ const logReqRes = (fileName) => {
   };
 };
 
-
   
 module.exports = {
   logReqRes,

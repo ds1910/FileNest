@@ -1,6 +1,12 @@
 const multer = require("multer");
 const path = require("path");
 
+const fileFilter = (req,file,cb) => {
+   if(file.mimetype.startsWith('image/'))cb(null,true);
+   else cb(new Error('Only image files are allowed!'), false); 
+};
+
+
 // Define custom storage configuration
 const storage = multer.diskStorage({
   // Destination folder where files will be stored
@@ -17,7 +23,11 @@ const storage = multer.diskStorage({
 
 
 // Create the multer instance with the defined storage config
-const upload = multer({ storage: storage });
+const upload = multer({
+   storage: storage,
+   fileFilter: fileFilter,
+   limits: { fileSize: 5 * 1024 * 1024 } 
+ });
 
 module.exports = upload;
 
