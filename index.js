@@ -9,6 +9,9 @@ const { logReqRes } = require("./middleware");
 const upload = require("./middleware/multer");
 const isError = require("./middleware/error");
 
+
+const {handelUploadToCloud} = require("./controller/file");
+
 // App initialization
 const app = express();
 const port = process.env.PORT || 3000;
@@ -37,11 +40,7 @@ app.get("/", (req, res) => {
 });
 
 // File upload route
-app.post("/upload", upload.single("profileImage"), (req, res) => {
-  console.log(req.body);
-  console.log(req.file);
-  return res.redirect("/");
-});
+app.post("/upload", upload.single("profileImage"), handelUploadToCloud);
 
 // Error-handling middleware (must be last)
 app.use(isError);
