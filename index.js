@@ -1,16 +1,24 @@
 // Essential requires
 const express = require("express");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 require('dotenv').config();
 
-// Connection and middleware requires
+
+// Database requires
+const USER = require("./model/user");
+
+// Connection To MongoDB 
 const connectMongoDb = require("./connection");
-const { logReqRes } = require("./middleware");
-const upload = require("./middleware/multer");
+
+//  middleware requires
+const { logReqRes, checkAuthentication, restrictTo } = require("./middleware");
 const isError = require("./middleware/error");
 
 
-const {handelUploadToCloud} = require("./controller/file");
+// Routers
+const userRouter = require("./routes/user");
+const mediaRouter = require("./routes/media");
 
 // App initialization
 const app = express();
@@ -20,11 +28,10 @@ const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./view"));
 
-// Built-in middlewares
+// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-// Custom request logging middleware
+app.use(cookieParser());
 app.use(logReqRes("log.txt"));
 
 
@@ -35,12 +42,9 @@ connectMongoDb("mongodb://127.0.0.1:27017/BugVault")
 
 
 // Routes
-app.get("/", (req, res) => {
-  res.render("home.ejs");
-});
+app.use("/user", userRouter);
+app.use("/media", mediaRouter);
 
-// File upload route
-app.post("/upload", upload.single("profileImage"), handelUploadToCloud);
 
 // Error-handling middleware (must be last)
 app.use(isError);
