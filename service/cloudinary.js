@@ -22,6 +22,7 @@ const uploadWithRetry = async (localFilePath) => {
     try {
       const result = await cloudinary.uploader.upload(localFilePath, {
         resource_type: "auto",
+         type: "authenticated",
       });
       console.log("Uploaded to Cloudinary:", result.secure_url);
       return result;
