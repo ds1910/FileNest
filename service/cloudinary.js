@@ -6,25 +6,23 @@ const pRetry = require("p-retry").default;
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // 📦 x p-retry: Automatically retries a failed async function (like file upload)
 // 👉 Useful when calling unstable external services (e.g. Cloudinary, APIs)
 // 🔁 Helps handle temporary issues like network failure or rate limits
 
-
-
 const uploadWithRetry = async (localFilePath) => {
-
+  
   const upload = async () => {
     try {
-      const result = await cloudinary.uploader.upload(localFilePath, {
+      await cloudinary.uploader.upload(localFilePath, {
         resource_type: "auto",
-         type: "authenticated",
+        type: "authenticated", 
       });
-      console.log("Uploaded to Cloudinary:", result.secure_url);
+      
+      console.log("Uploaded to Cloudinary:");
       return result;
     } catch (err) {
       console.log(err);
@@ -34,12 +32,10 @@ const uploadWithRetry = async (localFilePath) => {
   };
 
   try {
-   
-     // Retry up to 3 times with exponential backoff if upload fails
+    // Retry up to 3 times with exponential backoff if upload fails
     // ⏳ Exponential Backoff: Increases wait time after each failed retry (e.g. 1s, 2s, 4s)
-   // 🎯 Reduces load on server, avoids hitting rate limits, gives time to recover
-  // 🚀 Built-in to p-retry for smarter and safer retries in production
-
+    // 🎯 Reduces load on server, avoids hitting rate limits, gives time to recover
+    // 🚀 Built-in to p-retry for smarter and safer retries in production
     const response = await pRetry(upload, { retries: 3 });
 
     // Delete local file after successful upload
@@ -48,7 +44,6 @@ const uploadWithRetry = async (localFilePath) => {
     });
 
     return response;
-
   } catch (err) {
     console.error("Cloudinary upload failed after retries:", err);
 
@@ -61,7 +56,17 @@ const uploadWithRetry = async (localFilePath) => {
   }
 };
 
-module.exports = uploadWithRetry;
+// 🔐 Generate a signed private URL for accessing authenticated files
+function generateSignedUrl(publicId, resourceType = "image", type = "authenticated") {
+  const expiresAt = Math.floor(Date.now() / 1000) + 60; 
 
+  return cloudinary.utils.private_download_url(publicId, resourceType, {
+    type: type, 
+    expires_at: expiresAt,
+  });
+}
 
-   
+module.exports = {
+  uploadWithRetry,
+  generateSignedUrl,
+};

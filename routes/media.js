@@ -1,5 +1,5 @@
 const express = require("express");
-const {handelUploadToCloud} = require("../controller/file");
+const {handelUploadToCloud,handelViewFromCloud} = require("../controller/file");
 const upload = require("../middleware/multer");
 
 const router = express.Router();
@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
 
 
 router.route("/upload").post(upload.single("profileImage"), handelUploadToCloud);
+router.route("/view/:id").post(handelViewFromCloud);
 
 
 
