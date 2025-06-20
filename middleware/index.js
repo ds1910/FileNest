@@ -23,7 +23,6 @@ const logReqRes = (fileName) => {
 };
 
 // Middleware to extract user from JWT and attach to req.user
-//
 // [INFO] Auth middleware with built-in auto-refresh using refresh token.
 // If access token is expired, tries to verify refresh token and issue a new one.
 // Ideal for server-rendered apps or protected backend routes.

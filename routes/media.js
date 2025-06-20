@@ -1,7 +1,9 @@
 const express = require("express");
-const { handelUploadToCloud,
+const {
+  handelUploadToCloud,
   handelViewFromCloud,
-  handelDownloadFromCloud} = require("../controller/file");
+  handelDownloadFromCloud,
+} = require("../controller/file");
 
 const upload = require("../middleware/multer");
 
@@ -12,10 +14,8 @@ router.get("/", (req, res) => {
 });
 
 
-router.route("/upload").post(upload.single("profileImage"), handelUploadToCloud);
-router.route("/view/:id").post(handelViewFromCloud);
-router.route("/download/:id").post(handelDownloadFromCloud);
-
-
+router.post("/upload", upload.single("profileImage"), handelUploadToCloud);
+router.get("/view/:id", handelViewFromCloud);
+router.get("/download/:id", handelDownloadFromCloud);
 
 module.exports = router;
